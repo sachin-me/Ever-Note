@@ -21,15 +21,29 @@
           <a href='/posts/<%= post._id %>/likes' class="post__likes"><i class="far fa-heart"></i><%= " " + post.likes %></a>
           <a href="/posts/<%= post._id %>/edit" class="post__edit"><i class="fas fa-pencil-alt"></i></a>
           <a href="/posts/<%= post._id %>/delete" class="post__delete"><i class="far fa-trash-alt"></i></a>
-          <div>
-            <form action="/posts/<%= post._id %>/comment" method="POST">
-              <label for="comment-section">
-                <textarea name="description" id="comment-section" placeholder="comment here..."></textarea>
-                <input type="hidden" name="post" value=<%= post._id %>>
-                <button>Add Comment</button>
-              </label>
-              <!-- <a href="/posts/<%= post._id %>/comment" class="post__comment"><i class="far fa-comments"></i></a> -->
-            </form>
+        </div>
+        <div class="comment-form__wrapper">
+          <form action="/posts/<%= post._id %>/comment" method="POST">
+            <label for="comment-section">
+              <textarea name="description" id="comment-section" placeholder="comment here..."></textarea>
+              <input type="hidden" name="post" value=<%= post._id %>>
+            </label>
+            <!-- <a href="/posts/<%= post._id %>/comment" class="post__comment"><i class="far fa-comments"></i></a> -->
+            <button><i class="far fa-comments"></i></button>
+          </form>
+        </div>
+        <div class="comment_wrapper">
+          <div class="comment__div">
+            <% if(comment.length > 0){ %>
+              <% comment.forEach((data) => { %>
+                <% if(data.description) { %>
+                  <h3><%= data.description %></h3>
+                  <p><%= data.created_at %></p>
+                <% } %>
+              <% }); %>
+            <% } else { %>
+              <p>No Comment Found!!</p>
+            <% } %>  
           </div>
         </div>
       </div>

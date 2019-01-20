@@ -7,10 +7,6 @@ var CommentPost = mongoose.model('CommentPost');
 
 /* GET users listing. */
 
-router.get('/posts/newPost', (req, res) => {
-  res.render('newPost');
-})
-
 router.post('/', (req, res) => {
   var newPost = new PostBlog(req.body);
   console.log(newPost);
@@ -20,15 +16,11 @@ router.post('/', (req, res) => {
   })
 })
 
-router.get('/', (req, res) => {
-  PostBlog.find({}, (err, posts) => {
-    console.log(posts);
-    if (err) res.status(500).send(err);
-    res.render('posts', {posts: posts});
-  })
+router.get('/newPost', (req, res) => {
+  res.render('newPost');
 })
 
-router.get('/posts/:id/edit', (req, res) => {
+router.get('/:id/edit', (req, res) => {
   let id = req.params.id;
   PostBlog.findById(id, (err, post) => {
     console.log(post);
@@ -37,7 +29,7 @@ router.get('/posts/:id/edit', (req, res) => {
   })
 })
 
-router.post('/posts/:id', (req, res) => {
+router.post('/:id', (req, res) => {
   let id = req.params.id;
 
   PostBlog.findByIdAndUpdate(id, req.body, {new: true}, (err, post) => {
@@ -46,7 +38,7 @@ router.post('/posts/:id', (req, res) => {
   })
 })
 
-router.get('/posts/:id/delete', (req, res) => {
+router.get('/:id/delete', (req, res) => {
   let id = req.params.id;
   console.log(id);
   PostBlog.findByIdAndDelete(id, (err, post) => {
@@ -55,7 +47,7 @@ router.get('/posts/:id/delete', (req, res) => {
   })
 })
 
-router.get('/posts/:id/likes', (req, res) => {
+router.get('/:id/likes', (req, res) => {
   let id = req.params.id;
   PostBlog.findByIdAndUpdate(id, { $inc: { likes: 1}}, (err, post) => {
     if (err) res.status(500).send(err);
@@ -63,31 +55,47 @@ router.get('/posts/:id/likes', (req, res) => {
   })
 })
 
-router.get('/posts/:id', (req, res) => {
+router.get('/:id', (req, res) => {
   let id = req.params.id;
   PostBlog.findById(id, (err, post) => {
     if (err) res.status(500).send(err);
-    res.render('post', {post: post});
+    // res.render('post', {post: post});
+    PostBlog.findById(id).populate('Comments').exec((err, comment) => {
+      console.log(comment, 'comments list');
+      if (err) throw new Error('Comment not found');
+      res.render('post', {post: post, comment: comment.Comments});
+    })
   })
 })
 
-router.post('/posts/:id/comment', (req, res) => {
+router.post('/:id/comment', (req, res) => {
   var newComment = new CommentPost(req.body);
-  console.log(newComment);
   var id = req.params.id;
 
   newComment.save(err => {
-    if (err) throw err;
-    res.redirect(`/posts/${id}`);
+    PostBlog.findByIdAndUpdate(id, { $push: { Comments: newComment.id } }, (err, data) => {
+      if (err) throw err;
+      res.redirect(`/posts/${id}`);
+    })
   })
+
+  PostBlog.findById(id, (err, comment) => {
+    if (err) throw err;
+    let uniqComment = comment.Comments;
+    uniqComment.push(newComment);
+    console.log(uniqComment);
+  })
+
 })
 
-router.get('/posts/:id/comment', (req, res) => {
-  CommentPost.find({}, (err, comments) => {
-    console.log(comments);
-    if (err) res.status(500).send(err);
-    res.render('posts', {comments: comments});
-  })
-})
+// router.get('/:id/comment', (req, res) => {
+//   let id = req.params.id;
+//   PostBlog.findById(id).populate('Comments').exec((err, data) => {
+//     console.log(data);
+//     if (err) throw new Error('Comment not found');
+//     res.render('post', {comment: data});
+//   })
+// });
+
 
 module.exports = router;
