@@ -4,6 +4,8 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
+var session = require('express-session');
+var MongoStore = require('connect-mongo')(session);
 
 mongoose.connect('mongodb://localhost:27017/app', {useNewUrlParser: true}, (err) => {
   if (err) throw err;
@@ -12,7 +14,7 @@ mongoose.connect('mongodb://localhost:27017/app', {useNewUrlParser: true}, (err)
 
 require('./model/Post');
 require('./model/Comment');
-require('./model/RegisterUser');
+require('./model/User');
 var PostBlog = mongoose.model('PostBlog');
 var CommentPost = mongoose.model('CommentPost');
 
@@ -37,6 +39,15 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+//use sessions for tracking logins
+app.use(session({
+  secret: 'work hard',
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({ mongooseConnection: mongoose.connection })
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

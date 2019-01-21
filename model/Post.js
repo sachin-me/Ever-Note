@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var slug = require('slug');
 
 var Schema = mongoose.Schema;
 
@@ -7,8 +8,14 @@ var PostSchema = new Schema({
   description: String,
   tags: String,
   likes: { type: Number, default: 0},
-  Comments: [{type: Schema.Types.ObjectId, ref: 'CommentPost'}]
+  Comments: [{type: Schema.Types.ObjectId, ref: 'CommentPost'}],
+  slug: String,
 }, { timestamps: {createdAt: 'created_at'}});
+
+PostSchema.pre("save", function(next) {
+  this.slug = slug(this.title, { lower: true });
+  next();
+})
 
 var PostBlog = mongoose.model('PostBlog', PostSchema);
 

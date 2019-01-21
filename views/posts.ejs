@@ -16,6 +16,9 @@
     <div class="logo">
       <a href="/">Ever Note</a>
     </div>
+    <div class="user-login__wrapper">
+      <a href="/login" class="user__login"><i class="fas fa-sign-in-alt"></i></a>
+    </div>
     <div class="add__post">
       <a href="/posts/newPost">+</a>
     </div>
@@ -27,7 +30,7 @@
     <div class="posts__wrapper">
       <% for(var i = 0; i < posts.length; i++) { %>
       <div class="post__div">
-        <a href='/posts/<%= posts[i]._id %>' class="post__link">Title: <%= posts[i].title %></a>
+        <a href='/posts/<%= posts[i].slug %>' class="post__link">Title: <%= posts[i].title %></a>
         <p class="post__content">Content: <%= posts[i].description %></p>
         <p class="post__tags">Tags: <%= posts[i].tags %></p>
         <p class="post__created_at">Created At: <%= posts[i].created_at %></p>
