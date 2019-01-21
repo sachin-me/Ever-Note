@@ -9,7 +9,6 @@ var CommentPost = mongoose.model('CommentPost');
 
 router.post('/', (req, res) => {
   var newPost = new PostBlog(req.body);
-  console.log(newPost);
   newPost.save(err => {
     if (err) throw err;
     res.redirect('/');
@@ -23,7 +22,6 @@ router.get('/newPost', (req, res) => {
 router.get('/:id/edit', (req, res) => {
   let id = req.params.id;
   PostBlog.findById(id, (err, post) => {
-    console.log(post);
     if (err) res.status(500).send(err);
     res.render('editPost', {post: post})
   })
@@ -40,7 +38,6 @@ router.post('/:id', (req, res) => {
 
 router.get('/:id/delete', (req, res) => {
   let id = req.params.id;
-  console.log(id);
   PostBlog.findByIdAndDelete(id, (err, post) => {
     if (err) res.status(500).send(err);
     res.redirect('/');
@@ -59,11 +56,10 @@ router.get('/:id', (req, res) => {
   let id = req.params.id;
   PostBlog.findById(id, (err, post) => {
     if (err) res.status(500).send(err);
-    // res.render('post', {post: post});
+
     PostBlog.findById(id).populate('Comments').exec((err, comment) => {
-      console.log(comment, 'comments list');
       if (err) throw new Error('Comment not found');
-      res.render('post', {post: post, comment: comment.Comments});
+      res.render('post', {post: post, comments: comment.Comments});
     })
   })
 })
@@ -83,19 +79,32 @@ router.post('/:id/comment', (req, res) => {
     if (err) throw err;
     let uniqComment = comment.Comments;
     uniqComment.push(newComment);
-    console.log(uniqComment);
   })
 
 })
 
-// router.get('/:id/comment', (req, res) => {
-//   let id = req.params.id;
-//   PostBlog.findById(id).populate('Comments').exec((err, data) => {
-//     console.log(data);
-//     if (err) throw new Error('Comment not found');
-//     res.render('post', {comment: data});
-//   })
-// });
+router.get('/:id/comment/:id/edit', (req, res) => {
+  let id = req.params.id;
+  CommentPost.findById(id, (err, comment) => {
+    if (err) throw new Error('Could not edit');
+    res.render('editComment', {comment: comment});
+  })
+});
 
+router.post('/:postId/comment/:id', (req, res) => {
+  let id = req.params.id;
+  CommentPost.findByIdAndUpdate({_id: id},  { $set: { description: req.body.description }}, {new: true},(err, comment) => {
+    if (err) throw new Error('Could not edit comment');
+    res.redirect(`/posts/${req.params.postId}`);
+  })
+})
+
+router.get('/:postId/comment/:id/delete', (req, res) => {
+  let id = req.params.id;
+  CommentPost.findByIdAndDelete(id, (err, comment) => {
+    if (err) throw new Error('Could not delete the comment');
+    res.redirect(`/posts/${req.params.postId}`);
+  })
+})
 
 module.exports = router;

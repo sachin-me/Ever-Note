@@ -180,7 +180,7 @@ body {
 }
 
 /*==================*/
-/* Comment */
+/* Comment-Form */
 /*==================*/
 .comment-form__wrapper {
   padding: 20px 0;
@@ -216,5 +216,16 @@ body {
 .comment-form__wrapper form button i {
   font-size: 20px;
   color: #00B7FF;
+}
+
+/*==================*/
+/* Comment-Wrapper */
+/*==================*/
+.comment__div h3 {
+  color: #333;
+}
+
+.comment__div p {
+  color: #555;
 }
 /*# sourceMappingURL=style.css.map */

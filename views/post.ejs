@@ -10,6 +10,17 @@
   
 </head>
 <body>
+  <header class="header">
+    <div class="logo">
+      <a href="/">Ever Note</a>
+    </div>
+    <div class="add__post">
+      <a href="/posts/newPost">+</a>
+    </div>
+    <div class="register-user_wrapper">
+      <a href="/register" class="register__user"><i class="fas fa-user-plus"></i></a>
+    </div>
+  </header>
   <section class="section">
     <div class="posts__wrapper">
       <div class="post__div">
@@ -28,17 +39,18 @@
               <textarea name="description" id="comment-section" placeholder="comment here..."></textarea>
               <input type="hidden" name="post" value=<%= post._id %>>
             </label>
-            <!-- <a href="/posts/<%= post._id %>/comment" class="post__comment"><i class="far fa-comments"></i></a> -->
             <button><i class="far fa-comments"></i></button>
           </form>
         </div>
         <div class="comment_wrapper">
           <div class="comment__div">
-            <% if(comment.length > 0){ %>
-              <% comment.forEach((data) => { %>
-                <% if(data.description) { %>
-                  <h3><%= data.description %></h3>
-                  <p><%= data.created_at %></p>
+            <% if(comments.length > 0){ %>
+              <% comments.forEach((comment) => { %>
+                <% if(comment.description) { %>
+                  <h3 class="data-title"><%= comment.description %></h3>
+                  <p class="data-created"><%= comment.created_at %></p>
+                  <a href="/posts/<%= post._id %>/comment/<%= comment._id %>/edit" class="post__edit"><i class="fas fa-pencil-alt"></i></a>
+                  <a href="/posts/<%= post._id %>/comment/<%= comment._id %>/delete" class="post__delete"><i class="far fa-trash-alt"></i></a>
                 <% } %>
               <% }); %>
             <% } else { %>
