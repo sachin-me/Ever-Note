@@ -1,31 +1,19 @@
-var express = require('express');
-var router = express.Router();
-var mongoose = require('mongoose');
-var bcrypt = require('bcrypt');
+const express = require('express');
+const router = express.Router();
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const passport = require('passport');
 
-var PostBlog = mongoose.model('PostBlog');
-var User = mongoose.model('User');
-
-var isUser = (req, res, next) => {
-  if(req.session.UserId) {
-    User.findById(req.session.UserId, (err, user) => {
-      req.user = user;
-      res.locals.user = user;
-    });
-    return next();
-    
-  }
-  res.status(403).redirect('/login');
-};
-
+const PostBlog = mongoose.model('PostBlog');
+const User = mongoose.model('User');
 
 /* GET home page. */
 
-router.get('/', isUser, (req, res) => {
+router.get('/', (req, res) => {
+  let userId = req.user ? req.user._id : null;
   PostBlog.find({}, (err, posts) => {
-    console.log(req.session);
     if (err) res.status(500).send(err);
-    res.render('posts', {posts: posts});
+    res.render('posts', {posts: posts, userId: userId, user: req.user});
   })
 })
 
@@ -34,11 +22,10 @@ router.get('/register', (req, res) => {
 })
 
 router.post('/register', (req, res) => {
-  var registeredUser = new User(req.body);
-  console.log(registeredUser);
+  const registeredUser = new User(req.body);
   registeredUser.save((err) => {
     if (err) throw err;
-    res.redirect('/');
+    res.redirect('/login');
   })
 })
 
@@ -46,17 +33,17 @@ router.get('/login', (req, res) => {
   res.render('login');
 })
 
-router.post('/login', (req, res) => {
-  var {email, password} = req.body;
-  User.findOne({email: email}, (err, user) => {
-    if(err) res.status(500).send(err);
-    if(!user) res.status(400).json({error: 'User does not exist'});
-    if(!bcrypt.compareSync(password, user.password)) res.status(400).json({error: 'Incorrect Password'});
-    req.session.UserId = user._id;
+router.post('/login', 
+  passport.authenticate('local', { failureRedirect: '/login' }),
+  function(req, res) {
     res.redirect('/');
-  })
+  });
 
-
+router.get('/logout', (req, res) => {
+  req.session.destroy();
+  req.logOut();
+  res.redirect('/');
 })
+
 
 module.exports = router;

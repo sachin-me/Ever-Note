@@ -12,14 +12,26 @@
 <body>
   <header class="header">
     <div class="logo">
-      <a href="/">Ever Note</a>
+      <a href="/" title="Back to Home Page">Ever Note</a>
     </div>
-    <div class="add__post">
-      <a href="/posts/newPost">+</a>
-    </div>
-    <div class="register-user_wrapper">
-      <a href="/register" class="register__user"><i class="fas fa-user-plus"></i></a>
-    </div>
+    <% if (userId) { %>
+      <div class="add__post">
+        <a href="/posts/newPost" title="create a new post">+</a>
+      </div>
+      <div class="user-login__wrapper">
+        <a href="/logout" class="user__login" title="logout"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
+      <div class="user-info" title="user name">
+        <p><%= user.firstName.split('')[0] + user.lastName.split('')[0] %></p>
+      </div>
+    <% } else { %>      
+      <div class="user-login__wrapper">
+        <a href="/login" class="user__login"><i class="fas fa-sign-in-alt" title="login"></i></a>
+      </div>
+      <div class="register-user_wrapper">
+        <a href="/register" class="register__user" title="create account"><i class="fas fa-user-plus"></i></a>
+      </div>
+    <% } %>
   </header>
   <section class="section">
     <div class="posts__wrapper">
@@ -29,7 +41,7 @@
         <p class="post__tags">Tags: <%= post.tags %></p>
         <p class="post__created_at">Created At: <%= post.created_at %></p>
         <div class="button__wrapper">
-          <a href='/posts/<%= post._id %>/likes' class="post__likes"><i class="far fa-heart"></i><%= " " + post.likes %></a>
+          <a href='/posts/<%= post._id %>/likes' class="post__likes"><i class="far fa-heart"></i><%= " " + post.likes.count %></a>
           <a href="/posts/<%= post._id %>/edit" class="post__edit"><i class="fas fa-pencil-alt"></i></a>
           <a href="/posts/<%= post._id %>/delete" class="post__delete"><i class="far fa-trash-alt"></i></a>
         </div>
@@ -38,6 +50,7 @@
             <label for="comment-section">
               <textarea name="description" id="comment-section" placeholder="comment here..."></textarea>
               <input type="hidden" name="post" value=<%= post._id %>>
+              <input type="hidden" name="author" value=<%=  userId ? user._id : "" %>>
             </label>
             <button><i class="far fa-comments"></i></button>
           </form>

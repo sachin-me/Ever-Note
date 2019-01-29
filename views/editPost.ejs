@@ -12,10 +12,7 @@
 <body>
   <header class="header">
     <div class="logo">
-      <a href="/">Ever Note</a>
-    </div>
-    <div class="add__post">
-      <a href="/posts/newPost">+</a>
+      <a href="/" title="Back to Home Page">Ever Note</a>
     </div>
   </header>
   <div class="form__wrapper">
@@ -32,6 +29,7 @@
       <label for="tags" class="tag__label">
         <input type="text" id="tags" name="tags" value="<%= post.tags %>" placeholder="Enter tags here...">
       </label>
+      <input type="hidden" name="author" value=<%= user._id %>>
       <div class="btn__wrapper">
         <button class="submit__btn">Submit</button>
       </div>

@@ -16,15 +16,24 @@
     <div class="logo">
       <a href="/">Ever Note</a>
     </div>
-    <div class="user-login__wrapper">
-      <a href="/login" class="user__login"><i class="fas fa-sign-in-alt"></i></a>
-    </div>
-    <div class="add__post">
-      <a href="/posts/newPost">+</a>
-    </div>
-    <div class="register-user_wrapper">
-      <a href="/register" class="register__user"><i class="fas fa-user-plus"></i></a>
-    </div>
+    <% if (userId) { %>
+      <div class="add__post">
+        <a href="/posts/newPost" title="create a new post">+</a>
+      </div>
+      <div class="user-login__wrapper">
+        <a href="/logout" class="user__login" title="logout"><i class="fas fa-sign-out-alt"></i></a>
+      </div>
+      <div class="user-info" title="user name">
+        <p><%= user.firstName.split('')[0] + user.lastName.split('')[0] %></p>
+      </div>
+    <% } else { %>      
+      <div class="user-login__wrapper">
+        <a href="/login" class="user__login" title="login"><i class="fas fa-sign-in-alt"></i></a>
+      </div>
+      <div class="register-user_wrapper">
+        <a href="/register" class="register__user" title="create account"><i class="fas fa-user-plus"></i></a>
+      </div>
+    <% } %>
   </header>
   <section class="section">
     <div class="posts__wrapper">
@@ -35,9 +44,11 @@
         <p class="post__tags">Tags: <%= posts[i].tags %></p>
         <p class="post__created_at">Created At: <%= posts[i].created_at %></p>
         <div class="button__wrapper">
-          <a href='/posts/<%= posts[i]._id %>/likes' class="post__likes"><i class="far fa-heart"></i><%= " " + posts[i].likes %></a>
-          <a href="/posts/<%= posts[i]._id %>/edit" class="post__edit"><i class="fas fa-pencil-alt"></i></a>
-          <a href="/posts/<%= posts[i]._id %>/delete" class="post__delete"><i class="far fa-trash-alt"></i></a>
+          <a href='/posts/<%= posts[i]._id %>/likes' class="post__likes"><i class="far fa-heart"></i><%= " " + posts[i].likes.count %></a>
+          <% if (JSON.stringify(userId) == JSON.stringify(posts[i].author)) { %>
+            <a href="/posts/<%= posts[i]._id %>/edit" class="post__edit"><i class="fas fa-pencil-alt"></i></a>
+            <a href="/posts/<%= posts[i]._id %>/delete" class="post__delete"><i class="far fa-trash-alt"></i></a>
+          <% } %>
         </div>
       </div>
       <% } %>

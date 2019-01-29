@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,11 +8,17 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/style.css" />
 </head>
+
 <body>
-  <section>
+  <header class="header">
+    <div class="logo">
+      <a href="/" title="Back to Home Page">Ever Note</a>
+    </div>
+  </header>
+  <section class="login-form__wrapper">
     <form action="/login" method="POST">
       <label for="email">
-        <input type="email" name="email" id="email" placeholder="Enter your email here..." >
+        <input type="email" name="email" id="email" placeholder="Enter your email here...">
       </label>
       <label for="password">
         <input type="password" name="password" id="password" placeholder="Enter your password here...">
@@ -20,6 +27,10 @@
         <button>Login</button>
       </div>
     </form>
+    <div class="new-user__wrapper">
+      Create a new user <a href="/register">Sign Up</a> ?
+    </div>
   </section>
 </body>
+
 </html>
