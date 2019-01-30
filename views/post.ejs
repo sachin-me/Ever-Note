@@ -22,7 +22,7 @@
         <a href="/logout" class="user__login" title="logout"><i class="fas fa-sign-out-alt"></i></a>
       </div>
       <div class="user-info" title="user name">
-        <p><%= user.firstName.split('')[0] + user.lastName.split('')[0] %></p>
+        <p><%= user.name.split(' ')[0][0] + user.name.split(' ')[1][0] %></p>
       </div>
     <% } else { %>      
       <div class="user-login__wrapper">
@@ -42,8 +42,10 @@
         <p class="post__created_at">Created At: <%= post.created_at %></p>
         <div class="button__wrapper">
           <a href='/posts/<%= post._id %>/likes' class="post__likes"><i class="far fa-heart"></i><%= " " + post.likes.count %></a>
-          <a href="/posts/<%= post._id %>/edit" class="post__edit"><i class="fas fa-pencil-alt"></i></a>
-          <a href="/posts/<%= post._id %>/delete" class="post__delete"><i class="far fa-trash-alt"></i></a>
+          <% if (JSON.stringify(userId) == JSON.stringify(post.author)) { %>
+            <a href="/posts/<%= post._id %>/edit" class="post__edit"><i class="fas fa-pencil-alt"></i></a>
+            <a href="/posts/<%= post._id %>/delete" class="post__delete"><i class="far fa-trash-alt"></i></a>
+          <% } %>
         </div>
         <div class="comment-form__wrapper">
           <form action="/posts/<%= post._id %>/comment" method="POST">

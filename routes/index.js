@@ -23,7 +23,8 @@ router.get('/register', (req, res) => {
 
 router.post('/register', (req, res) => {
   const registeredUser = new User(req.body);
-  registeredUser.save((err) => {
+  registeredUser.save((err, user) => {
+    console.log(err, user)
     if (err) throw err;
     res.redirect('/login');
   })
@@ -45,5 +46,14 @@ router.get('/logout', (req, res) => {
   res.redirect('/');
 })
 
+router.get('/auth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+router.get('/auth/google/callback', 
+  passport.authenticate('google', { failureRedirect: '/login' }),
+  function(req, res) {
+    // Successful authentication, redirect home.
+    res.redirect('/');
+  });
 
 module.exports = router;

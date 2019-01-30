@@ -24,7 +24,7 @@
         <a href="/logout" class="user__login" title="logout"><i class="fas fa-sign-out-alt"></i></a>
       </div>
       <div class="user-info" title="user name">
-        <p><%= user.firstName.split('')[0] + user.lastName.split('')[0] %></p>
+        <p><%= user.name.split(' ')[0][0] + user.name.split(' ')[1][0] %></p>
       </div>
     <% } else { %>      
       <div class="user-login__wrapper">

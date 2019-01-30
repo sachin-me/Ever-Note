@@ -263,6 +263,56 @@ body {
   color: #00B7FF;
 }
 
+.edit-comment__wrapper {
+  padding: 40px 60px;
+  max-width: 400px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+  margin-top: 40px;
+  -webkit-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.edit-comment__wrapper form {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-rows: (1fr)[4];
+      grid-template-rows: repeat(4, 1fr);
+  grid-gap: 20px;
+}
+
+.edit-comment__wrapper form textarea {
+  height: 35px;
+  width: 100%;
+  font-size: 16px;
+  outline: none;
+  border-radius: 2px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  padding: 5px;
+}
+
+.edit-comment__wrapper form div {
+  text-align: center;
+}
+
+.edit-comment__wrapper form div button {
+  background: #00B7FF;
+  color: aliceblue;
+  border: none;
+  width: 80px;
+  height: 40px;
+  border-radius: 2px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.edit-comment__wrapper form div button:hover {
+  -webkit-box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+          box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+  -webkit-transition: all 0.3s ease;
+  transition: all 0.3s ease;
+}
+
 /*==================*/
 /* Comment-Wrapper */
 /*==================*/
@@ -306,8 +356,8 @@ body {
 .login-form__wrapper form {
   display: -ms-grid;
   display: grid;
-  -ms-grid-rows: (1fr)[4];
-      grid-template-rows: repeat(4, 1fr);
+  -ms-grid-rows: (1fr)[3];
+      grid-template-rows: repeat(3, 1fr);
   grid-gap: 20px;
 }
 
@@ -347,6 +397,7 @@ body {
   text-align: center;
   font-size: 20px;
   color: #555;
+  padding-top: 10px;
 }
 
 .login-form__wrapper .new-user__wrapper a {

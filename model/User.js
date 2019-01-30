@@ -5,17 +5,26 @@ const saltRounds = 10;
 
 const Schema = mongoose.Schema;
 let userSchema = new Schema({
-  firstName: String,
-  lastName: String,
-  email: String,
+  name: String,
+  email: {type: String, unique: true},
   password: String,
-  posts: [{type: Schema.Types.ObjectId, ref: 'User'}]
+  provider: String,
+  google: {
+    name: String, 
+    photo: String
+  }
 })
 
 userSchema.pre('save', function(next) {
-  this.password = bcrypt.hashSync(this.password, saltRounds);
-  next();
+  console.log(this.password, 'check password');
+  if(this.password) {
+    console.log('Inside pre save')
+    this.password = bcrypt.hashSync(this.password, saltRounds);
+    next();
+  } else {
+    console.log('passed')
+    next();
+  }
 });
 
-const User = mongoose.model('User', userSchema);
-module.exports = User;
+module.exports = mongoose.model('User', userSchema);

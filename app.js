@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-mongoose.connect('mongodb://localhost:27017/app', {useNewUrlParser: true}, (err) => {
+mongoose.connect('mongodb://localhost:27017/blog', {useNewUrlParser: true}, (err) => {
   if (err) throw err;
   console.log('Connected to database!!');
 });
